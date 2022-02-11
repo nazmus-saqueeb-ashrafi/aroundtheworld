@@ -5,16 +5,17 @@ const { Schema } = mongoose;
 
 const requiredNumber = {
   type: Number,
-  required: true,
+  required: [true,'Please add a longitude and latitude'],
 };
 
 const PostSchema = new Schema(
   {
     
-    // user: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "users",
-    // },
+    user: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
 
     title: {
       type: String,
@@ -44,7 +45,7 @@ const PostSchema = new Schema(
     },
     visitDate: {
       required: true,
-      type: Date,
+      type: [true,'Please add a visit date'],
     },
 
     //
