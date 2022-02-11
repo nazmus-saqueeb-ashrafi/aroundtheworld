@@ -12,5 +12,4 @@ router.post("/", setPosts);
 
 router.put("/:id", updatePost);
 
-
 router.delete("/:id", deletePost);

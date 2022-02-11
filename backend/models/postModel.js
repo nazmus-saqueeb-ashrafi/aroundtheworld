@@ -44,8 +44,8 @@ const PostSchema = new Schema(
       max: 180,
     },
     visitDate: {
-      required: true,
-      type: [true,'Please add a visit date'],
+      required: [true,'Please add a visit date'],
+      type: Date,
     },
 
     //

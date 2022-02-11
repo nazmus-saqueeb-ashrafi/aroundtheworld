@@ -14,8 +14,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// our route pointer
+// our routes pointer
 app.use("/api/posts", require("./routes/postRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
 
 // overide default error handler from Express
 app.use(errorHandler)
