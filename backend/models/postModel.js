@@ -1,4 +1,5 @@
 //MongoDb schema
+const { text } = require("express");
 const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
@@ -25,8 +26,8 @@ const PostSchema = new Schema(
         type: String,
         required: [true,'Please add a description']
     },
-    comments: String,
-    image: String,
+    // comments: String,
+    image: [],
     rating: {
       type: Number,
       min: 0,
@@ -44,8 +45,11 @@ const PostSchema = new Schema(
       max: 180,
     },
     visitDate: {
-      required: [true,'Please add a visit date'],
+      // required: [true,'Please add a visit date'],
       type: Date,
+    },
+    airline:{
+      type: String,
     },
 
     //

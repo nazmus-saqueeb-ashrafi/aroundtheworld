@@ -4,6 +4,12 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      require: true,
+      min: 3,
+      max: 20,
+    },
     username: {
       type: String,
       require: true,
