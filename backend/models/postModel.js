@@ -1,5 +1,4 @@
 //MongoDb schema
-const { text } = require("express");
 const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
@@ -27,7 +26,9 @@ const PostSchema = new Schema(
         required: [true,'Please add a description']
     },
     // comments: String,
-    image: [],
+    image: [{
+      type: String,
+    }],
     rating: {
       type: Number,
       min: 0,
@@ -61,36 +62,14 @@ const PostSchema = new Schema(
     },
 
     // Likes ,comments & date of
-    likes: [
-      {
-        user: {
-          type: Schema.Types.ObjectId,
-          ref: "users",
-        },
-      },
-    ],
-    comments: [
-      {
-        user: {
-          type: Schema.Types.ObjectId,
-          ref: "users",
-        },
-        text: {
-          type: String,
-          required: true,
-        },
-        date: {
-          type: Date,
-          default: Date.now,
-        },
-        name: {
-          type: String,
-        },
-        avatar: {
-          type: String,
-        },
-      },
-    ],
+    likes: {
+      type: Array,
+      default: [],
+    },
+    comments: [{
+       type: Schema.Types.ObjectId,
+       ref: 'Comment'
+    }],
 
     date: {
       type: Date,

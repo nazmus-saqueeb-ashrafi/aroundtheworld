@@ -105,9 +105,63 @@ const generateToken = (id) => {
   })
 }
 
+// follow, unfollow users
+
+// @desc    Follow a user
+// @route   PUT /api/users/:id/follow
+// @access  Private
+const followUser = asyncHandler( async (req, res) => {
+    if(req.user.id !== req.params.id){
+        const user = await User.findById(req.params.id) 
+        const currentUser = await User.findById(req.user.id) 
+
+        if (!user.followers.includes(req.user.id)) {
+            await user.updateOne({ $push: { followers: req.user.id } });
+            await currentUser.updateOne({ $push: { followings: req.params.id } });
+
+            res.status(200).json("User has been followed");
+        } else {
+            res.status(403).json("You already follow this user");
+        }
+
+    }else{
+        res.status(400)
+        throw new Error('You cannot follow yourself')
+
+    }
+})
+
+// @desc    Unfollow a user
+// @route   PUT /api/users/:id/unfollow
+// @access  Private
+const unfollowUser = asyncHandler( async (req, res) => {
+    if(req.user.id !== req.params.id){
+        const user = await User.findById(req.params.id) 
+        const currentUser = await User.findById(req.user.id) 
+
+        if (user.followers.includes(req.user.id)) {
+            await user.updateOne({ $pull: { followers: req.user.id } });
+            await currentUser.updateOne({ $pull: { followings: req.params.id } });
+
+            res.status(200).json("User has been unfollowed");
+        } else {
+            res.status(403).json("You are not following this user");
+        }
+
+    }else{
+        res.status(400)
+        throw new Error('You cannot unfollow yourself')
+
+    }
+})
+
+
 
 module.exports= {
     getMe,
     registerUser,
-    loginUser
+    loginUser,
+    followUser,
+    unfollowUser,
 }
+
