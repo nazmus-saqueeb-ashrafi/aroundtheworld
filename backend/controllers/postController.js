@@ -103,20 +103,36 @@ const deletePost = asyncHandler(async(req,res) =>{
 
 // like/dislike post, comment on post/delete comment, timeline posts
 
-// @desc    Like/dislike posts
+// @desc    Like/dislike posts, comment
 // @route   PUT /api/posts/:id/like
 // @access  Private
 const likePost = asyncHandler(async(req,res) =>{
     try {
         const post = await Post.findById(req.params.id);
 
-        if (!post.likes.includes(req.user.id)) {
-            await post.updateOne({ $push: { likes: req.user.id } });
-            res.status(200).json("The post has been liked");
-        } else {
-            await post.updateOne({ $pull: { likes: req.user.id } });
-            res.status(200).json("The post has been disliked");
+        if(!post){
+            const comment = await Comment.findById(req.params.id);
+
+            if (!comment.likes.includes(req.user.id)) {
+                await comment.updateOne({ $push: { likes: req.user.id } });
+                res.status(200).json("The comment has been liked");
+            } else {
+                await comment.updateOne({ $pull: { likes: req.user.id } });
+                res.status(200).json("The comment has been disliked");
+            }
+
+        }else{
+            if (!post.likes.includes(req.user.id)) {
+                await post.updateOne({ $push: { likes: req.user.id } });
+                res.status(200).json("The post has been liked");
+            } else {
+                await post.updateOne({ $pull: { likes: req.user.id } });
+                res.status(200).json("The post has been disliked");
+            }
+
         }
+
+        
 
   } catch (err) {
 
@@ -133,6 +149,8 @@ const likePost = asyncHandler(async(req,res) =>{
 // @access  Private
 const commentPost = asyncHandler(async(req,res) =>{
     try {
+        
+        // check if post id in param
         const post = await Post.findById(req.params.id);
 
         const comment = await Comment.create({
@@ -141,12 +159,27 @@ const commentPost = asyncHandler(async(req,res) =>{
             text: req.body.text,
         })
 
-        await post.updateOne({ $push: { 
-            comments: comment,
-        } });
+        if(!post){
+            
+            // if no post id in param, there is a comment id in param
+            const originalcomment = await Comment.findById(req.params.id);
 
-        res.status(200).json("Comment added to the post");
-        
+            await originalcomment.updateOne({ $push: { 
+                comments: comment,
+            } });
+
+            res.status(200).json("Comment added to the comment");
+
+        }else{
+
+            await post.updateOne({ $push: { 
+                comments: comment,
+            } });
+
+            res.status(200).json("Comment added to the post");
+
+        }
+
   } catch (err) {
 
     // res.status(500).json(err);
@@ -156,9 +189,12 @@ const commentPost = asyncHandler(async(req,res) =>{
   }
 
 })
+// do similar treatment for delete comments, like/unlike comments
 
-// @desc    delete comment
-// @route   PUT /api/posts/:id/deletecomment
+
+
+// @desc    delete comment from posts
+// @route   DELETE /api/posts/:id/deletecomment
 // @access  Private
 const deleteComment = asyncHandler(async(req,res) =>{
     try {
@@ -169,7 +205,7 @@ const deleteComment = asyncHandler(async(req,res) =>{
 
         // Make sure the logged in user matches the user who is OP or commented
         if (post.user.toString() === req.user.id || comment.user.toString()=== req.user.id) {
-
+            
             comment.remove()
             await post.updateOne({ $pull: { 
                 comments: comment._id,
@@ -184,9 +220,6 @@ const deleteComment = asyncHandler(async(req,res) =>{
 
         }
 
-
-        
-        
   } catch (err) {
 
     // res.status(500).json(err);
@@ -195,6 +228,38 @@ const deleteComment = asyncHandler(async(req,res) =>{
     throw new Error(err)
   }
 
+})
+
+
+// @desc    delete comment from comment (reply)
+// @route   DELETE /api/posts/:id/deletereply
+// @access  Private
+const deleteReply = asyncHandler(async(req,res) =>{
+    try {
+        const comment = await Comment.findById(req.params.id);
+        
+        if (comment.user.toString() === req.user.id) {
+            
+            const originalcomment = await Comment.findById(comment.post.toString());
+
+            console.log(comment)
+
+            await originalcomment.updateOne({ $pull: { 
+                comments: comment._id,
+            } });
+            comment.remove()
+
+            res.status(200).json("Comment deleted (your reply)");
+            
+        }else{
+            res.status(401)
+            throw new Error('User not authorized to delete this comment')
+        }
+  } catch (err) {
+    // res.status(500).json(err);
+    res.status(500)
+    throw new Error(err)
+  }
 })
 
 
@@ -231,5 +296,6 @@ module.exports= {
     timelinePosts,
     commentPost,
     deleteComment,
+    deleteReply,
 }
     
