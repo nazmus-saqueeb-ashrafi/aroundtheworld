@@ -44,7 +44,7 @@ const setPosts = asyncHandler( async (req,res) =>{
 })
 
 // @desc    Update posts
-// @route   PUT /api/posts
+// @route   PUT /api/posts/:id
 // @access  Private
 const updatePost = asyncHandler(async(req,res) =>{
     const post = await Post.findById(req.params.id)
@@ -74,7 +74,7 @@ const updatePost = asyncHandler(async(req,res) =>{
 })
 
 // @desc    Delete posts
-// @route   DELETE /api/posts
+// @route   DELETE /api/posts/:id
 // @access  Private
 const deletePost = asyncHandler(async(req,res) =>{
     const post = await Post.findById(req.params.id)
@@ -287,6 +287,82 @@ const timelinePosts = asyncHandler(async(req,res) =>{
 
 })
 
+// Sharing
+
+// @desc    Share a post
+// @route   POST /api/posts/:id/share
+// @access  Private
+const sharePost = asyncHandler(async(req,res) =>{
+    try {
+    const currentUser = await User.findById(req.user.id);
+    const originalPost = await Post.findById(req.params.id)
+    
+    if(originalPost){
+
+        // make a shared post with the original post (that is being shared)
+        const newPost = await Post.create({
+        
+            description: req.body.description,
+            longitude: originalPost.longitude,
+            latitude: originalPost.latitude,
+            user: req.user.id,
+            sharedPost: originalPost,
+
+        })
+
+        // current user knows what they shared
+        await currentUser.updateOne({ $push: { 
+                sharedPosts: newPost._id,
+            } });
+        
+        // original post know who shared it
+            await originalPost.updateOne({ $push:{
+                shares: req.user.id,
+            } });
+        
+        
+        res.status(200).json(newPost);
+        
+    }else{
+        res.status(500)
+        throw new Error("Post you want to share does not exist")
+    }
+
+    } catch (err) {
+        res.status(500)
+        throw new Error(err)
+    }
+
+})
+
+
+
+
+// @desc    Like/dislike posts, comment
+// @route   PUT /api/posts/:id/like
+// @access  Private
+// const likePost = asyncHandler(async(req,res) =>{
+//     try {
+//         const post = await Post.findById(req.params.id);
+
+//         if (!post.likes.includes(req.user.id)) {
+//             await post.updateOne({ $push: { likes: req.user.id } });
+//             res.status(200).json("The post has been liked");
+//         } else {
+//             await post.updateOne({ $pull: { likes: req.user.id } });
+//             res.status(200).json("The post has been disliked");
+//         }
+
+//   } catch (err) {
+
+//     // res.status(500).json(err);
+
+//     res.status(500)
+//     throw new Error(err)
+//   }
+
+// })
+
 module.exports= {
     getPosts,
     setPosts,
@@ -297,5 +373,6 @@ module.exports= {
     commentPost,
     deleteComment,
     deleteReply,
+    sharePost,
 }
     

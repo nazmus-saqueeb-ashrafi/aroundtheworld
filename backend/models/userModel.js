@@ -12,7 +12,7 @@ const userSchema = new Schema(
     },
     username: {
       type: String,
-      require: true,
+      require: false,
       min: 3,
       max: 20,
       unique: true,
@@ -64,6 +64,10 @@ const userSchema = new Schema(
       type: Number,
       enum: [1, 2, 3],
     },
+    sharedPosts:{
+      type: Array,
+      default:[]
+    }
 
   },
   { timestamps: true }

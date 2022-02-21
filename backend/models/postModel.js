@@ -19,11 +19,11 @@ const PostSchema = new Schema(
 
     title: {
       type: String,
-      required: [true,'Please add a title'],
+      // required: [true,'Please add a title'],
     },
     description:{
         type: String,
-        required: [true,'Please add a description']
+        // required: [true,'Please add a description']
     },
     // comments: String,
     image: [{
@@ -75,6 +75,18 @@ const PostSchema = new Schema(
       type: Date,
       default: Date.now,
     },
+
+    shares:{
+      type: Array,
+      default: [],
+    },
+
+    // a post may or maynot be a shared post
+    sharedPost:{
+      type: Schema.Types.ObjectId,
+      // required: true,
+      ref: "Post",
+    }
 
   },
   //---------------------

@@ -9,7 +9,8 @@ const {getPosts,
      timelinePosts,
      commentPost,
      deleteComment,
-     deleteReply
+     deleteReply,
+     sharePost,
     } = require('../controllers/postController')
 
 module.exports = router
@@ -38,3 +39,5 @@ router.delete("/:id/deletereply",protect, deleteReply);
 
 
 router.get("/timeline/all",protect, timelinePosts);
+
+router.post("/:id/share",protect, sharePost);
