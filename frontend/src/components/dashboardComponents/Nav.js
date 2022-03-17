@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom'
 
 import React from 'react'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { logout, reset } from '../../features/auth/authSlice'
+
 const navigation = [
   { name: 'Refresh', href: '#', current: true },
   // { name: 'Team', href: '#', current: false },
@@ -31,9 +35,27 @@ function classNames(...classes) {
 
 const Nav = ({dark,setDark}) => {
 
+
     const darkBtn = ()=>{
         setDark('dark')
     }
+
+    //redux
+
+    const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user} = useSelector(
+    (state) => state.auth
+  )
+
+  //
+
+  const onLogout = () =>{
+    dispatch(logout())
+    dispatch(reset())
+    navigate('/login')
+  }
 
     
   return (
@@ -155,6 +177,7 @@ const Nav = ({dark,setDark}) => {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
+                          <>
                           <Link to="/profile">
                             <a
                               href="#"
@@ -162,7 +185,22 @@ const Nav = ({dark,setDark}) => {
                             >
                               Your Profile
                             </a>
+                            
                           </Link>
+
+                             <a
+                              href=""
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              onClick={onLogout}
+                            >
+                              Logout
+                            </a>
+
+
+                          </>
+                          
+
+                          
                         )}
                       </Menu.Item>
                       {/* <Menu.Item>

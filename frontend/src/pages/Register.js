@@ -20,7 +20,7 @@ const Register = () => {
     password2: '',
   })
 
-  //
+  // redux
 
   const { name, email, password, password2 } = formData
 
