@@ -1,15 +1,30 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"
+import { useState } from 'react';
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    
+    email: '',
+    password: '',
+
+  })
+
+  const {  email, password } = formData
+
+  const onChange = (e)=>{
+    setFormData((prevState)=>({
+      ...prevState,
+      [e.target.name] : e.target.value
+    }))
+  }
+  const onSubmit = (e)=>{
+    e.preventDefault()
+  }
+
   return (
-    <motion.div
-        key="modal"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        exit={{ scaleX: 0 }}
-      >
+    
         <div>
           <section class="text-gray-600 bg-white body-font flex h-screen">
             <div class="container px-5 py-24 mx-auto flex flex-wrap items-center">
@@ -58,7 +73,7 @@ const Login = () => {
         </div>
 
 
-      </motion.div>
+      
     
   )
 }

@@ -19,9 +19,9 @@ const getMe = asyncHandler( async(req,res) =>{
 // @access  Public
 const registerUser = asyncHandler( async (req, res) => {
 
-    const { username, name, email, password } = req.body
+    const { name, email, password } = req.body
 
-    if (!username || !name || !email || !password) {
+    if (!name || !email || !password) {
         res.status(400)
         throw new Error('Please add all fields')
     }
@@ -46,7 +46,6 @@ const registerUser = asyncHandler( async (req, res) => {
 
     // Create user
     const user = await User.create({
-        username,
         name,
         email,
         password: hashedPassword,
