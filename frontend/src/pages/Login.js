@@ -1,7 +1,14 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { login, reset } from '../features/auth/authSlice'
+import { toast } from 'react-toastify'
+
+import Spinner from '../components/Spinner'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -13,15 +20,58 @@ const Login = () => {
 
   const {  email, password } = formData
 
+  // redux
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  )
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess || user) {
+      navigate('/')
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
+
+  if (isLoading) {
+    return <Spinner />
+  }
+  
+  //
+
   const onChange = (e)=>{
     setFormData((prevState)=>({
       ...prevState,
       [e.target.name] : e.target.value
     }))
   }
+
+  
   const onSubmit = (e)=>{
     e.preventDefault()
+
+    const userData = {
+        
+        email,
+        password,
+      }
+
+      dispatch(login(userData))
   }
+
+  //
+
+
+  
 
   return (
     
@@ -36,21 +86,28 @@ const Login = () => {
                 
               </div>
               <div class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
-                
-                <div class="relative mb-4">
+
+                <form  onSubmit={onSubmit}>
+
+                  <div class="relative mb-4">
                   <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
-                  <input type="email" id="email" name="email" class="w-full bg-white rounded border border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
-                </div>
-                <div class="relative mb-4">
-                  <label for="password" class="leading-7 text-sm text-gray-600">Password</label>
-                  <input type="password" id="password" name="password" class="w-full bg-white rounded border border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
+                  <input type="email" id="email" name="email" onChange={onChange} value={email} class="w-full bg-white rounded border border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
                 </div>
 
-                <Link to="/dashboard">
-                  <button class="text-white bg-sky-600 hover:bg-sky-700 border-0 py-2 w-full focus:outline-none rounded text-lg">
+                <div class="relative mb-4">
+                  <label for="password" class="leading-7 text-sm text-gray-600">Password</label>
+                  <input type="password" id="password" name="password" onChange={onChange} value={password}  class="w-full bg-white rounded border border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
+                </div>
+
+                
+                  <button onSubmit={onSubmit} class="text-white bg-sky-600 hover:bg-sky-700 border-0 py-2 w-full focus:outline-none rounded text-lg">
                     Log in
                   </button>
-                </Link>
+                
+
+                </form>
+                
+                
                
                 <Link class="text-s text-sky-500 hover:text-sky-600 mt-3 cursor-pointer m-auto" to="/">
                   Forgotten password?

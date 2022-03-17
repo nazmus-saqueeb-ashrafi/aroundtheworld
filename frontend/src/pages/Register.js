@@ -20,11 +20,13 @@ const Register = () => {
     password2: '',
   })
 
-  // redux
+  
 
   const { name, email, password, password2 } = formData
 
-   const navigate = useNavigate()
+  // redux
+
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
