@@ -1,4 +1,5 @@
 import Sidebar from '../components/dashboardComponents/Sidebar'
+import MessengerSideBar from '../components/dashboardComponents/MessengerSideBar'
 import Nav from '../components/dashboardComponents/Nav'
 import { useState, useEffect } from 'react';
 
@@ -7,9 +8,49 @@ import ExpandedPostMaker from '../components/profilePageComponents/ExpandedPostM
 import Post from '../components/profilePageComponents/Post';
 import UnExpandedPostMaker from '../components/profilePageComponents/UnExpandedPostMaker';
 
+import { useSelector,useDispatch  } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { getTimeLinePosts, reset } from '../features/post/postSlice'
 
 
 export default function Dashboard() {
+
+  // redux
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user,timelinePosts } = useSelector(
+    (state) => state.post
+  )
+
+  
+  useEffect(()=>{
+
+    // make sure user is logged in
+    if(!user){
+      navigate('/login')
+    }
+
+    // grab timeline posts from user
+    dispatch(getTimeLinePosts(user))
+    
+
+  },[user,navigate])
+
+
+  // iterate thru timeline posts
+  const posts = timelinePosts.map((post)=>{
+
+    return(
+      <>
+        <Post post={post}/>
+      </>
+
+    )
+              
+  })
+  
 
   // const [dark,setDark] = useState('dark')
 
@@ -34,7 +75,10 @@ export default function Dashboard() {
 
 
       {/* nav bar */}
-      <Nav />
+      <div class="sticky top-0 z-50">
+        <Nav />
+      </div>
+      
   
       
       {/* body */}
@@ -45,27 +89,34 @@ export default function Dashboard() {
             <p class="text-slate-500">You have a new message!</p>
           </div>
         </div> */}
-
-        <div class="absolute">
+        
+        {/* sidebar */}
+        {/* <div class="absolute  ">
           <Sidebar/>
+        </div> */}
 
-        </div>
+        <div class="grid xl:grid-cols-5 md:grid-cols-4 grid-cols-1">
 
-        <div class="grid place-items-center xl:grid-cols-5 md:grid-cols-4 grid-cols-1">
+          <div class="top-10 left-0 fixed">
+            <Sidebar/>
+          </div>
 
-          {/* 'unexpanded post' card */}
-          <div class="xl:col-start-2 xl:col-span-3 md:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-11/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full">
+          <div class="top-10 right-0 fixed">
+            <MessengerSideBar/>
+          </div>
+          
+          <div class="xl:col-start-2 xl:col-span-3 lg:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-8/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full">
+
+            {/* 'unexpanded post' card */}
             <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
+
             <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
             {/* post */}
-            <Post/>
+            {posts}
+    
 
           </div>
-
-
-          {/* sidebar */}
-        
 
         </div>
 
@@ -81,7 +132,6 @@ export default function Dashboard() {
 
     </div>
     
-
     
     
   )
