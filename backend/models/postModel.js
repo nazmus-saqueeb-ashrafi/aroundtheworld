@@ -23,7 +23,7 @@ const PostSchema = new Schema(
     },
     description:{
         type: String,
-        // required: [true,'Please add a description']
+        required: [true,'Please add a description']
     },
     // comments: String,
     image: [{

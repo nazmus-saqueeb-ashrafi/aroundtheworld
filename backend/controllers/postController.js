@@ -18,8 +18,9 @@ const getPosts = asyncHandler( async(req,res) =>{
 const setPosts = asyncHandler( async (req,res) =>{
 
     if (!req.body.title) {
-        res.status(400)
-        throw new Error('Please add a title')
+        // res.status(400)
+        // throw new Error('Please add a title')
+        
     } else if (!req.body.description) {
         res.status(400)
         throw new Error('Please add a description')
@@ -32,7 +33,7 @@ const setPosts = asyncHandler( async (req,res) =>{
     }
 
     const post = await Post.create({
-        title: req.body.title,
+        // title: req.body.title,
         description: req.body.description,
         longitude: req.body.longitude,
         latitude: req.body.latitude,

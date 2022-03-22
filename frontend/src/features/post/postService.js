@@ -19,8 +19,29 @@ const getTimelinePosts = async (userData) => {
   return response.data
 }
 
+
+// Get timeline posts for user
+const createPost = async (postData,token) => {
+
+  console.log(token)
+  
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+
+  const response = await axios.post(API_URL , postData,config)
+
+//   if (response.data) {
+//     localStorage.setItem('user', JSON.stringify(response.data))
+//   }
+
+  return response.data
+}
+
 const postService = {
   getTimelinePosts, 
+  createPost
   
 }
 

@@ -8,9 +8,9 @@ const Post = ({post}) => {
         <div class="col-span-1 row-span-3 text-center p-2 card rounded-none h-60">
             <Map
                     initialViewState={{
-                        longitude: post.latitude,
-                        latitude: post.longitude,
-                        zoom: 10
+                        longitude: post.longitude,
+                        latitude: post.latitude,
+                        zoom: 4
                     }}
                     // style={{width: "w-full", height: 250}}
                     attributionControl="none"

@@ -5,10 +5,12 @@ import postService from './postService'
 const user = JSON.parse(localStorage.getItem('user'))
 
 const timelinePosts = []
+const post = null
 
 const initialState = {
   user: user ? user : null,
   timelinePosts: timelinePosts ? timelinePosts : null,
+  post: post ? post : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -22,7 +24,6 @@ export const getTimeLinePosts = createAsyncThunk(
 
       try {
       
-      console.log(postService.getTimelinePosts(user))
       return await postService.getTimelinePosts(user)
 
       
@@ -38,7 +39,37 @@ export const getTimeLinePosts = createAsyncThunk(
       return thunkAPI.rejectWithValue(message)
       
     }
+  }
+)
+
+
+// Create a new post
+
+// Create post
+export const createPost = createAsyncThunk(
+    'post/createPost',
+    async (postData, thunkAPI) => {
+
+      try {
+      
+      const token = thunkAPI.getState().auth.user.token
+
+      return await postService.createPost(postData,token)
+
+      
+    } catch (error) {
+
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+      
     }
+  }
 )
 
 
@@ -61,7 +92,7 @@ export const postSlice = createSlice({
       .addCase(getTimeLinePosts.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        console.log(action.payload)
+    
         state.timelinePosts = action.payload
       })
       .addCase(getTimeLinePosts.rejected, (state, action) => {
@@ -69,6 +100,22 @@ export const postSlice = createSlice({
         state.isError = true
         state.message = action.payload
         state.timelinePosts = null
+      })
+
+      .addCase(createPost.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        console.log(action.payload)
+        state.post.push = action.payload
+      })
+      .addCase(createPost.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        state.post = null
       })
    }
 })

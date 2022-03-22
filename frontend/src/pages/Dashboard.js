@@ -16,13 +16,13 @@ import { getTimeLinePosts, reset } from '../features/post/postSlice'
 export default function Dashboard() {
 
   // redux
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const { user,timelinePosts } = useSelector(
     (state) => state.post
   )
+  //
 
   
   useEffect(()=>{
@@ -38,13 +38,24 @@ export default function Dashboard() {
 
   },[user,navigate])
 
+  console.log(timelinePosts)
 
-  // iterate thru timeline posts
-  const posts = timelinePosts.map((post)=>{
+
+  // sort and iterate thru timeline posts
+
+
+  const arrayForSort = [...timelinePosts]
+  const sortedTimelinePosts = arrayForSort.sort(function(a,b){
+  return b.updatedAt.localeCompare(a.updatedAt);
+  })
+
+
+  const posts = sortedTimelinePosts
+  .map((post)=>{
 
     return(
       <>
-        <Post post={post}/>
+        <Post key={post._id} post={post}/>
       </>
 
     )
@@ -82,7 +93,7 @@ export default function Dashboard() {
   
       
       {/* body */}
-      <div className='bg-gray-200 text-gray-600 dark:text-gray-300 dark:bg-base-100 h-screen' >
+      <div className='bg-gray-200 text-gray-600 dark:text-gray-300 dark:bg-base-100 ' >
         {/* <div class="p-5 max-w-sm mx-auto bg-white rounded-xl shadow-xl flex items-center space-x-4">
           <div>
             <div class="text-xl font-medium text-black">ChitChat</div>
@@ -101,7 +112,7 @@ export default function Dashboard() {
             <Sidebar/>
           </div>
 
-          <div class="top-10 right-0 fixed">
+          <div class="top-10 right-0 fixed invisible md:visible">
             <MessengerSideBar/>
           </div>
           
