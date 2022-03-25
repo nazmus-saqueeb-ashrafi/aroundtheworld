@@ -4,7 +4,7 @@ import { useDimensions } from "../../useDimentions"
 import Map, {Marker} from 'react-map-gl';
 import "mapbox-gl/dist/mapbox-gl.css"
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 import Modal from "../profilePageComponents/Modal";
 import ModalHeader from "../profilePageComponents/ModalHeader";
@@ -17,18 +17,63 @@ import { createPost, reset } from '../../features/post/postSlice'
 
 
 
-const ExpandedPostMaker = ({showModal,setShowModal}) => {
+const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,setInitialViewState, newPlace, setNewPlace}) => {
 
     const constraintsRef = useRef(null);
     const { width,height } = useDimensions(constraintsRef);
 
+    // Everytime modal is closed and there is a current post we want map to focus back on the current post when modal is open again, instead of the clicked new place last time madal was opened.
+    useEffect(()=>{
+        if(!showModal){
+            console.log("modal closed")
+            if(currentPost){
+                setInitialViewState({
+                longitude: currentPost.longitude, 
+                latitude: currentPost.latitude,
+                zoom: 4
+            })
+            }
+            
 
-    const [viewport, setViewport] = useState({
+        }
     
+  },[showModal])
+  //
+    
+
+    
+    const [viewport, setViewport] = useState({
         zoom: 6
     });
+    
+    
+    
+    useEffect(()=>{
+        if(currentPost){
 
-    const [newPlace,setNewPlace]= useState(null)
+            setInitialViewState({
+                longitude: currentPost.longitude,
+                latitude: currentPost.latitude,
+                zoom: 4
+
+            })
+
+            console.log(currentPost)
+            console.log(initialViewState)
+
+        }else{
+            console.log("no curr post")
+            console.log(initialViewState)
+            
+
+        }
+    
+  },[currentPost])
+    
+    
+
+    // console.log(initialPlace)
+
 
     const [description, setDescription] = useState("")
 
@@ -37,7 +82,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
         setDescription(e.target.value)
     }
 
-    
+
 
     const handleMapClick = (e)=>{
 
@@ -69,9 +114,9 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
     const handlePostClick = ()=>{
 
         if(description && newPlace.lat && newPlace.long){
-            console.log(description)
-            console.log(newPlace.lat)
-            console.log(newPlace.long)
+            // console.log(description)
+            // console.log(newPlace.lat)
+            // console.log(newPlace.long)
 
             const post = 
                 {
@@ -102,7 +147,13 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
             <div class="grid place-items-center bg-base-100" >
 
-                <ModalHeader toggler={() => setShowModal(false)}/>
+                <ModalHeader toggler={() => {
+                    setShowModal(false)
+
+                    // kill map
+                    // window.location.reload();
+                    
+                    }}/>
                     
                 
                 <div class="flex justify-start items-center pt-3 pb-4">
@@ -111,38 +162,36 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                             <img src="https://api.lorem.space/image/face?hash=92048"/>
                         </div>
                     </div>
-                    <h3>Maluha is feeling good at Sibui.</h3>
+                    <h3>Maluha is feeling good at Sibui. </h3>
                 </div>
 
                 
                 {/* map */}
+                
                 <div class=" card w-full bg-base-100 shadow-xl grid place-items-center mr-5 ml-5 mb-5" ref={constraintsRef}>
 
                     <input type="text" placeholder="Where did you go?" class="absolute z-10 input input-bordered text-lg w-8/12 rounded-full mb-80 opacity-90"></input>
 
                     <Map
-                        initialViewState={{
-                            longitude: 23.8103,
-                            latitude: 44.57875,
-                            zoom: 3.5
-                        }}
+                        {...initialViewState}
+                        onMove={evt => setInitialViewState(evt.initialViewState)}
                         style={{width: "90vw", height: 400}}
                         mapStyle="mapbox://styles/mapbox/streets-v9"
                         mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                         onDblClick={handleMapClick}
                     >
-                        {newPlace&&(
+                        {newPlace?(
                         <Marker longitude={newPlace.long} latitude={newPlace.lat} anchor="bottom" >
                          <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
                         </Marker>
-                        )}
-                        
-           
+                        ):currentPost?(
+                            <Marker longitude={currentPost.longitude} latitude={currentPost.latitude} anchor="bottom" >
+                         <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
+                        </Marker>
+                        ):null}
 
                     </Map>
 
-                    
-                    
                 </div>
 
                 <textarea type="text" rows="5" placeholder="Write something about your trip......" class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 " onChange={onChange}></textarea>

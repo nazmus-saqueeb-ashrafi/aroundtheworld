@@ -1,6 +1,24 @@
 import React from 'react'
 
-const UnExpandedPostMaker = ({showModal,setShowModal}) => {
+const UnExpandedPostMaker = ({showModal,setShowModal,setCurrentPost, currentPost ,initialViewState,setInitialViewState,newPlace, setNewPlace}) => {
+
+  const onClick = ()=>{
+      setShowModal(true)
+      
+      setInitialViewState({
+        longitude: 0, 
+        latitude: 0,
+        zoom: 1
+      }) // to clear initial state and zoom
+
+      setCurrentPost(null) // to clear previous marker
+
+      // you want newPlace to reset to wipe any previous markers
+        setNewPlace(null)
+
+      
+
+  }
   return (
     <>
     <div className='flex justify-start items-center bg-base-100 shadow-xl z-10 pt-2 pb-2 xl:pr-10 xl:pl-10 pr-5 pl-5 rounded-xl'>
@@ -14,7 +32,7 @@ const UnExpandedPostMaker = ({showModal,setShowModal}) => {
                 {/* buttons */}
                 <div class='flex-grow pt-4'>
 
-                    <div class=" btn-outline cursor-pointer rounded-full p-2 bg-slate-600 hover:bg-slate-500 hover:text-slate-50 "  data-modal-toggle="defaultModal" type="button" onClick={(e) => setShowModal(true)}><span class='text-lg pl-3'>Where did you go, Simon?</span></div>
+                    <div class=" btn-outline cursor-pointer rounded-full p-2 bg-slate-600 hover:bg-slate-500 hover:text-slate-50 "  data-modal-toggle="defaultModal" type="button" onClick={onClick}><span class='text-lg pl-3'>Where did you go, Simon?</span></div>
 
 
                     <div class='flex justify-center items-center xl:p-3 p-1 space-x-3'>

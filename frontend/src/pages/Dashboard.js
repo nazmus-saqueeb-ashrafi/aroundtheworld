@@ -15,6 +15,21 @@ import { getTimeLinePosts, reset } from '../features/post/postSlice'
 
 export default function Dashboard() {
 
+  // states used to manipulate the map and markers (try redux maybe)
+  const [showModal, setShowModal] = useState(false);
+  const [currentPost, setCurrentPost] = useState(false);
+  const [initialViewState,setInitialViewState]= useState({
+        
+    longitude: 0,
+    latitude: 0,
+    zoom: 1
+                        
+  })
+  const [newPlace,setNewPlace]= useState(null)
+
+  //
+  
+
   // redux
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -38,7 +53,12 @@ export default function Dashboard() {
 
   },[user,navigate])
 
-  console.log(timelinePosts)
+  
+  useEffect(()=>{
+
+    //refresh map 
+    
+  },[showModal])
 
 
   // sort and iterate thru timeline posts
@@ -55,7 +75,7 @@ export default function Dashboard() {
 
     return(
       <>
-        <Post key={post._id} post={post}/>
+        <Post key={post._id} post={post} showModal={showModal} setShowModal={setShowModal} currentPost={currentPost} setCurrentPost={setCurrentPost} newPlace={newPlace} setNewPlace={setNewPlace} />
       </>
 
     )
@@ -75,8 +95,6 @@ export default function Dashboard() {
   //   darkMode()
 
   // },[setDark])
-
-  const [showModal, setShowModal] = useState(false);
 
 
   return (
@@ -119,7 +137,7 @@ export default function Dashboard() {
           <div class="xl:col-start-2 xl:col-span-3 lg:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-8/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full">
 
             {/* 'unexpanded post' card */}
-            <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
+            <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal} setCurrentPost={setCurrentPost} currentPost={currentPost} initialViewState={initialViewState} setInitialViewState={setInitialViewState} newPlace={newPlace} setNewPlace={setNewPlace}/>
 
             <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
@@ -134,7 +152,7 @@ export default function Dashboard() {
 
         {/* 'expanded post' card */}
         <div class="grid place-items-center">
-            <ExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
+            <ExpandedPostMaker currentPost={currentPost} showModal={showModal} setShowModal={setShowModal} initialViewState={initialViewState} setInitialViewState={setInitialViewState} newPlace={newPlace} setNewPlace={setNewPlace}/>
 
         </div>
 
