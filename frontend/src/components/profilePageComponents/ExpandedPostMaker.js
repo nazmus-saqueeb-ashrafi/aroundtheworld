@@ -13,7 +13,7 @@ import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 
 import { useSelector,useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { createPost, reset } from '../../features/post/postSlice'
+import { createPost, updatePost, reset } from '../../features/post/postSlice'
 
 
 
@@ -22,8 +22,14 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
     const constraintsRef = useRef(null);
     const { width,height } = useDimensions(constraintsRef);
 
-    // Everytime modal is closed and there is a current post we want map to focus back on the current post when modal is open again, instead of the clicked new place last time madal was opened.
+    const onChange = (e)=>{
+        setDescription(e.target.value)
+    }
+
+    
     useEffect(()=>{
+
+        // Everytime modal is closed and there is a current post we want map to focus back on the current post when modal is opened once again, instead of the clicked new place last time modal was opened.
         if(!showModal){
             console.log("modal closed")
             if(currentPost){
@@ -31,22 +37,29 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
                 longitude: currentPost.longitude, 
                 latitude: currentPost.latitude,
                 zoom: 4
-            })
+                })
+
+                setDescription(currentPost.description)
             }
             
 
         }
+        //
+
+        buttonNamer()
     
   },[showModal])
-  //
-    
 
-    
+        
     const [viewport, setViewport] = useState({
         zoom: 6
     });
-    
-    
+
+
+    const [description, setDescription] = useState("")
+    const [updatedPost, setUpdatedPost] = useState()
+
+
     
     useEffect(()=>{
         if(currentPost){
@@ -57,6 +70,15 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
                 zoom: 4
 
             })
+
+            setDescription(currentPost.description)
+
+            setUpdatedPost({
+                description : currentPost.description,
+                    longitude : currentPost.longitude,
+                    latitude : currentPost.latitude
+            })
+    
 
             console.log(currentPost)
             console.log(initialViewState)
@@ -69,19 +91,45 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
         }
     
   },[currentPost])
+
+
+  useEffect(()=>{ // for post update
+      if(newPlace){
+                setUpdatedPost(
+
+                    {
+                        description : description,
+
+                        longitude : newPlace.long,
+
+                        latitude : newPlace.lat
+
+                    }
+                )
+      }
+
+      if(description && !newPlace){
+
+          setUpdatedPost(
+
+                    {
+                        description : description,
+
+                        longitude : currentPost.longitude,
+
+                        latitude : currentPost.latitude
+
+                    }
+                )
+          
+      }
+        
+  },[newPlace,description])
     
     
 
     // console.log(initialPlace)
-
-
-    const [description, setDescription] = useState("")
-
-
-    const onChange = (e)=>{
-        setDescription(e.target.value)
-    }
-
+    
 
 
     const handleMapClick = (e)=>{
@@ -105,33 +153,68 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { user,post } = useSelector(
+    const { user } = useSelector(
         (state) => state.post
     )
 
+    // const [post,setPost] = useState()
+
     //
+    
+    const [text, setText] = useState('Post');
+    const buttonNamer = ()=>{
+        if(currentPost){
+            setText("Update")
+        }else{
+            setText("Post")
+        }
+    }
+
+    
 
     const handlePostClick = ()=>{
+        // create
+
 
         if(description && newPlace.lat && newPlace.long){
-            // console.log(description)
-            // console.log(newPlace.lat)
-            // console.log(newPlace.long)
-
+            
+            
             const post = 
-                {
-                    description : description,
-                    longitude : newPlace.long,
-                    latitude : newPlace.lat,
-                    
-                }
+            {
+                description : description,
+                longitude : newPlace.long,
+                latitude : newPlace.lat,
+            }
 
+    
             // create post 
             dispatch(createPost(post,user))
 
             setShowModal(false)
             window.location.reload();
         }
+
+        
+
+    }
+
+    const handleUpdatePostClick = () => {
+        // update
+            
+            
+        const post = updatedPost
+        const postId = currentPost._id
+
+        console.log(post)
+        console.log(postId)
+
+        // update post 
+        dispatch(updatePost({postId: postId,post}))
+        // {leadId: lead._id, leadData}
+
+        setShowModal(false)
+        window.location.reload();
+
 
 
     }
@@ -194,7 +277,7 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
 
                 </div>
 
-                <textarea type="text" rows="5" placeholder="Write something about your trip......" class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 " onChange={onChange}></textarea>
+                <textarea type="text" rows="5" placeholder="Write something about your trip......" class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200" value={description} onChange={onChange}></textarea>
 
                 <div class='flex flex-row justify-between items-center xl:p-3 p-1 space-x-3 w-full border-solid border-2 border-base-200 rounded-xl mt-4 pb-1'>
 
@@ -215,10 +298,10 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
                 </div>
 
                 {
-                    newPlace && description?(
-                        <button data-modal-toggle="defaultModal" type="button" class="btn btn-info mt-4 mb-2 w-full" onClick={handlePostClick}>Post</button>
+                    (currentPost && description) || (newPlace && description)?(
+                        <button data-modal-toggle="defaultModal" type="button" class="btn btn-info mt-4 mb-2 w-full" onClick={currentPost?handleUpdatePostClick:handlePostClick}>{text}</button>
                     ):(
-                        <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mt-4 mb-2 w-full pointer-events-none opacity-20" onClick={handlePostClick}>Post</button>
+                        <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mt-4 mb-2 w-full pointer-events-none opacity-20" >{text}</button>
                         
                     )
 

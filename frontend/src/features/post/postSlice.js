@@ -43,8 +43,6 @@ export const getTimeLinePosts = createAsyncThunk(
 )
 
 
-// Create a new post
-
 // Create post
 export const createPost = createAsyncThunk(
     'post/createPost',
@@ -58,6 +56,39 @@ export const createPost = createAsyncThunk(
 
       
     } catch (error) {
+
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+      
+    }
+  }
+)
+
+// Update post
+export const updatePost = createAsyncThunk(
+    'post/updatePost',
+    async ({postId, post}, thunkAPI) => {
+
+      try {
+      
+      const token = thunkAPI.getState().auth.user.token
+      
+      console.log(postId)
+      console.log(post)
+      
+
+      return await postService.updatePost(postId, post, token)
+
+      
+    } catch (error) {
+
+      
 
       const message =
         (error.response &&
@@ -86,6 +117,8 @@ export const postSlice = createSlice({
   },
    extraReducers: (builder) => {
     builder
+
+      // getTimeLinePosts
       .addCase(getTimeLinePosts.pending, (state) => {
         state.isLoading = true
       })
@@ -102,6 +135,7 @@ export const postSlice = createSlice({
         state.timelinePosts = null
       })
 
+      // createPost
       .addCase(createPost.pending, (state) => {
         state.isLoading = true
       })
@@ -112,6 +146,23 @@ export const postSlice = createSlice({
         state.post.push = action.payload
       })
       .addCase(createPost.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        state.post = null
+      })
+
+      // updatePost
+      .addCase(updatePost.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        console.log(action.payload)
+        state.post.push = action.payload
+      })
+      .addCase(updatePost.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

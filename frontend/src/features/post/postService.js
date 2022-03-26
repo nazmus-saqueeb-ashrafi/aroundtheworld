@@ -3,6 +3,7 @@ import axios from 'axios'
 const API_URL = '/api/posts/'
 
 // Get timeline posts for user
+// @route   GET /api/posts/timeline/all
 const getTimelinePosts = async (userData) => {
 
   const token = userData.token
@@ -20,7 +21,8 @@ const getTimelinePosts = async (userData) => {
 }
 
 
-// Get timeline posts for user
+// Create post
+// @route   POST /api/posts
 const createPost = async (postData,token) => {
 
   console.log(token)
@@ -39,9 +41,27 @@ const createPost = async (postData,token) => {
   return response.data
 }
 
+
+// Update post
+// @route   PUT /api/posts/:id
+const updatePost = async ( postId, post, token) => {
+
+  console.log(token)
+  
+  
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  const response = await axios.put(API_URL + postId , post, config)
+
+  return response.data
+}
+
 const postService = {
   getTimelinePosts, 
-  createPost
+  createPost,
+  updatePost
   
 }
 
