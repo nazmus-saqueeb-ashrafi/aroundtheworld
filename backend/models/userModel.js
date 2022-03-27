@@ -10,13 +10,13 @@ const userSchema = new Schema(
       min: 3,
       max: 20,
     },
-    username: {
-      type: String,
-      require: false,
-      min: 3,
-      max: 20,
-      unique: true,
-    },
+    // username: {
+    //   type: String,
+    //   require: false,
+    //   min: 3,
+    //   max: 20,
+    //   unique: true,
+    // },
     email: {
       type: String,
       required: true,

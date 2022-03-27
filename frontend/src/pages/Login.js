@@ -20,6 +20,18 @@ const Login = () => {
 
   const {  email, password } = formData
 
+  const onSubmit = (e)=>{
+    e.preventDefault()
+
+    const userData = {
+        
+        email,
+        password,
+      }
+
+      dispatch(login(userData))
+  }
+
   // redux
 
   const navigate = useNavigate()
@@ -36,9 +48,11 @@ const Login = () => {
 
     if (isSuccess || user) {
       navigate('/')
+      // window.location.reload(); // temp solve for flash bug when logging in
     }
 
     dispatch(reset())
+    
   }, [user, isError, isSuccess, message, navigate, dispatch])
 
 
@@ -56,22 +70,10 @@ const Login = () => {
   }
 
   
-  const onSubmit = (e)=>{
-    e.preventDefault()
-
-    const userData = {
-        
-        email,
-        password,
-      }
-
-      dispatch(login(userData))
-  }
+  
 
   //
 
-
-  
 
   return (
     

@@ -34,8 +34,12 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const { user,timelinePosts } = useSelector(
+  const { timelinePosts } = useSelector(
     (state) => state.post
+  )
+
+  const { user } = useSelector(
+    (state) => state.auth
   )
   //
 
@@ -45,10 +49,11 @@ export default function Dashboard() {
     // make sure user is logged in
     if(!user){
       navigate('/login')
+      
     }
 
     // grab timeline posts from user
-    dispatch(getTimeLinePosts(user))
+    dispatch(getTimeLinePosts())
     
 
   },[user,navigate])
@@ -62,13 +67,24 @@ export default function Dashboard() {
 
 
   // sort and iterate thru timeline posts
+  const [arrayForSort,setArrayForSort] = useState([])
+
+  useEffect(()=>{
 
 
-  const arrayForSort = [...timelinePosts]
+    if(timelinePosts){
+      setArrayForSort([...timelinePosts])
+    }else{
+      setArrayForSort([])
+
+    }
+
+  
+  },[timelinePosts])
+
   const sortedTimelinePosts = arrayForSort.sort(function(a,b){
   return b.updatedAt.localeCompare(a.updatedAt);
   })
-
 
   const posts = sortedTimelinePosts
   .map((post)=>{
@@ -81,8 +97,10 @@ export default function Dashboard() {
     )
               
   })
-  
 
+  //
+
+  
   // const [dark,setDark] = useState('dark')
 
   // const window = document.querySelector(".window");
@@ -142,7 +160,7 @@ export default function Dashboard() {
             <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
             {/* post */}
-            {posts}
+            {posts.length>0?posts:"No timeline posts"}
     
 
           </div>

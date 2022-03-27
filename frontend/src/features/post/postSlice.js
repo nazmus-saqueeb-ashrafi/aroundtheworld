@@ -20,10 +20,11 @@ const initialState = {
 // Get timeline posts for user
 export const getTimeLinePosts = createAsyncThunk(
     'post/timelinePosts',
-    async (user, thunkAPI) => {
+    async ( _ , thunkAPI) => {
 
       try {
-      
+
+      const user = thunkAPI.getState().auth.user
       return await postService.getTimelinePosts(user)
 
       

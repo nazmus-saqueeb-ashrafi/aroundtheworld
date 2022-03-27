@@ -39,7 +39,9 @@ const Register = () => {
     }
 
     if (isSuccess || user) {
+      // window.location.reload();
       navigate('/')
+      console.log(user)
     }
 
     dispatch(reset())
