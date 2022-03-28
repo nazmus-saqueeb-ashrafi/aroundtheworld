@@ -4,6 +4,8 @@ const UnExpandedPostMaker = ({showModal,setShowModal,setCurrentPost, currentPost
 
   const onClick = ()=>{
       setShowModal(true)
+
+      console.log(currentPost)
       
       setInitialViewState({
         longitude: 0, 

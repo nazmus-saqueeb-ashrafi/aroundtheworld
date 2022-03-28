@@ -58,10 +58,28 @@ const updatePost = async ( postId, post, token) => {
   return response.data
 }
 
+
+// Delete post
+// @route   DELETE /api/posts/:id
+const deletePost = async ( postId, token) => {
+
+  console.log(token)
+  
+  
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  const response = await axios.delete(API_URL + postId , config)
+
+  return response.data
+}
+
 const postService = {
   getTimelinePosts, 
   createPost,
-  updatePost
+  updatePost,
+  deletePost
   
 }
 

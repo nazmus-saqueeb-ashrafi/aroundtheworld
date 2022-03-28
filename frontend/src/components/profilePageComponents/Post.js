@@ -6,7 +6,7 @@ import {Marker} from 'react-map-gl';
 import "mapbox-gl/dist/mapbox-gl.css"
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 
-const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlace, setNewPlace}) => {
+const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlace, setNewPlace, showDeleteModal, setShowDeleteModal}) => {
 
 
   const [viewport, setViewport] = useState({
@@ -20,6 +20,11 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
     setCurrentPost(post)
     setNewPlace(null)
 
+  }
+
+  const deleteOnClick = () =>{
+      setCurrentPost(post)
+      setShowDeleteModal(true)
   }
 
 
@@ -78,7 +83,7 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
             
             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
               <li onClick={updateOnClick}><a>Update</a></li>
-              <li><a>Delete</a></li>
+              <li onClick={deleteOnClick}><a>Delete</a></li>
             </ul>
           </div>
 

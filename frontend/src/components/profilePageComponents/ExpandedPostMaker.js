@@ -17,7 +17,7 @@ import { createPost, updatePost, reset } from '../../features/post/postSlice'
 
 
 
-const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,setInitialViewState, newPlace, setNewPlace}) => {
+const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,initialViewState,setInitialViewState, newPlace, setNewPlace}) => {
 
     const constraintsRef = useRef(null);
     const { width,height } = useDimensions(constraintsRef);
@@ -45,6 +45,8 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
 
         }
         //
+
+        setDescription('')
 
         buttonNamer()
     
@@ -86,7 +88,9 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
         }else{
             console.log("no curr post")
             console.log(initialViewState)
+
             
+        
 
         }
     
@@ -115,9 +119,9 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
                     {
                         description : description,
 
-                        longitude : currentPost.longitude,
+                        longitude : currentPost?currentPost.longitude:null,
 
-                        latitude : currentPost.latitude
+                        latitude : currentPost?currentPost.latitude:null,
 
                     }
                 )
@@ -132,7 +136,7 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
     
 
 
-    const handleMapClick = (e)=>{
+    const handleMapClick = (e) => {
 
         // const [lng,lat] = e.lngLat
 
@@ -218,25 +222,27 @@ const ExpandedPostMaker = ({currentPost,showModal,setShowModal,initialViewState,
 
 
     }
+
+    const onModalClose = () =>{
+        setShowModal(false)
+    //     setCurrentPost(null)
+        
+    //    console.log(currentPost)
+
+    }
     
 
   return (
       
     <>
         
-            <Modal size="" id="defaultModal" active={showModal} toggler={() => setShowModal(false)} aria-hidden="true" >
+            <Modal size="" id="defaultModal" active={showModal} toggler={onModalClose} aria-hidden="true" >
 
                 {/* class="bg-base-100 shadow-xl z-50 xl:w-1/2 w-11/12 rounded-xl pt-2 pb-2 xl:pr-10 xl:pl-10 pr-5 pl-5 absolute" */}
 
             <div class="grid place-items-center bg-base-100" >
 
-                <ModalHeader toggler={() => {
-                    setShowModal(false)
-
-                    // kill map
-                    // window.location.reload();
-                    
-                    }}/>
+                <ModalHeader toggler={onModalClose}/>
                     
                 
                 <div class="flex justify-start items-center pt-3 pb-4">

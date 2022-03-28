@@ -3,8 +3,8 @@ import MessengerSideBar from '../components/dashboardComponents/MessengerSideBar
 import Nav from '../components/dashboardComponents/Nav'
 import { useState, useEffect } from 'react';
 
-
 import ExpandedPostMaker from '../components/profilePageComponents/ExpandedPostMaker';
+import DeletePostModal from '../components/profilePageComponents/DeletePostModal';
 import Post from '../components/profilePageComponents/Post';
 import UnExpandedPostMaker from '../components/profilePageComponents/UnExpandedPostMaker';
 
@@ -15,8 +15,9 @@ import { getTimeLinePosts, reset } from '../features/post/postSlice'
 
 export default function Dashboard() {
 
-  // states used to manipulate the map and markers (try redux maybe)
+  // states used to manipulate the map & markers, the modals (try redux maybe)
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentPost, setCurrentPost] = useState(false);
   const [initialViewState,setInitialViewState]= useState({
         
@@ -91,7 +92,7 @@ export default function Dashboard() {
 
     return(
       <>
-        <Post key={post._id} post={post} showModal={showModal} setShowModal={setShowModal} currentPost={currentPost} setCurrentPost={setCurrentPost} newPlace={newPlace} setNewPlace={setNewPlace} />
+        <Post key={post._id} post={post} showModal={showModal} setShowModal={setShowModal} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} currentPost={currentPost} setCurrentPost={setCurrentPost} newPlace={newPlace} setNewPlace={setNewPlace} />
       </>
 
     )
@@ -170,7 +171,13 @@ export default function Dashboard() {
 
         {/* 'expanded post' card */}
         <div class="grid place-items-center">
-            <ExpandedPostMaker currentPost={currentPost} showModal={showModal} setShowModal={setShowModal} initialViewState={initialViewState} setInitialViewState={setInitialViewState} newPlace={newPlace} setNewPlace={setNewPlace}/>
+            <ExpandedPostMaker currentPost={currentPost} setCurrentPost={setCurrentPost} showModal={showModal} setShowModal={setShowModal} initialViewState={initialViewState} setInitialViewState={setInitialViewState} newPlace={newPlace} setNewPlace={setNewPlace}/>
+
+        </div>
+
+        {/* delete post modal */}
+        <div class="grid place-items-center">
+            <DeletePostModal currentPost={currentPost} setCurrentPost={setCurrentPost} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal}/>
 
         </div>
 
