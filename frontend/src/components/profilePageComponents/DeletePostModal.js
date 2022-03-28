@@ -12,7 +12,7 @@ import { useSelector,useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { deletePost, reset } from '../../features/post/postSlice'
 
-const DeletePostModal = ({currentPost,setCurrentPost, showDeleteModal, setShowDeleteModal}) => {
+const DeletePostModal = ({currentPost,setCurrentPost, showDeleteModal, setShowDeleteModal, setDescription}) => {
 
     const dispatch = useDispatch()
 
@@ -31,8 +31,15 @@ const DeletePostModal = ({currentPost,setCurrentPost, showDeleteModal, setShowDe
 
     const onDeleteCancel = () =>{
         setShowDeleteModal(false)
+        setCurrentPost(null)
 
     }
+
+    useEffect(()=>{
+
+        setDescription('')
+    
+  },[showDeleteModal])
 
 
 

@@ -29,6 +29,12 @@ export default function Dashboard() {
   const [newPlace,setNewPlace]= useState(null)
 
   //
+
+  // states used to update post
+  const [description, setDescription] = useState("")
+    const [updatedPost, setUpdatedPost] = useState()
+
+  //
   
 
   // redux
@@ -171,13 +177,13 @@ export default function Dashboard() {
 
         {/* 'expanded post' card */}
         <div class="grid place-items-center">
-            <ExpandedPostMaker currentPost={currentPost} setCurrentPost={setCurrentPost} showModal={showModal} setShowModal={setShowModal} initialViewState={initialViewState} setInitialViewState={setInitialViewState} newPlace={newPlace} setNewPlace={setNewPlace}/>
+            <ExpandedPostMaker currentPost={currentPost} setCurrentPost={setCurrentPost} showModal={showModal} setShowModal={setShowModal} initialViewState={initialViewState} setInitialViewState={setInitialViewState} newPlace={newPlace} setNewPlace={setNewPlace} description={description} setDescription={setDescription} updatedPost={updatedPost} setUpdatedPost={setUpdatedPost}/>
 
         </div>
 
         {/* delete post modal */}
         <div class="grid place-items-center">
-            <DeletePostModal currentPost={currentPost} setCurrentPost={setCurrentPost} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal}/>
+            <DeletePostModal currentPost={currentPost} setCurrentPost={setCurrentPost} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} description={description} setDescription={setDescription} updatedPost={updatedPost} setUpdatedPost={setUpdatedPost}/>
 
         </div>
 

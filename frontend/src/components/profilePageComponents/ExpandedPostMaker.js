@@ -17,7 +17,7 @@ import { createPost, updatePost, reset } from '../../features/post/postSlice'
 
 
 
-const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,initialViewState,setInitialViewState, newPlace, setNewPlace}) => {
+const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,initialViewState,setInitialViewState, newPlace, setNewPlace, description, setDescription, updatedPost, setUpdatedPost}) => {
 
     const constraintsRef = useRef(null);
     const { width,height } = useDimensions(constraintsRef);
@@ -40,13 +40,15 @@ const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,i
                 })
 
                 setDescription(currentPost.description)
+            }else{
+                setDescription('')
             }
             
 
         }
         //
 
-        setDescription('')
+        
 
         buttonNamer()
     
@@ -57,9 +59,6 @@ const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,i
         zoom: 6
     });
 
-
-    const [description, setDescription] = useState("")
-    const [updatedPost, setUpdatedPost] = useState()
 
 
     
@@ -225,7 +224,7 @@ const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,i
 
     const onModalClose = () =>{
         setShowModal(false)
-    //     setCurrentPost(null)
+        setCurrentPost(null)
         
     //    console.log(currentPost)
 
