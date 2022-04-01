@@ -26,6 +26,9 @@ module.exports = {
       'display': ['Oswald','Mistral','Noto Serif Display'],
       'body': ['"Open Sans"'],
     },
+    // height:{
+    //   "h-100": "30rem"
+    // }
     
   },
   plugins: [require("daisyui",'flowbite/plugin')],

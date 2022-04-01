@@ -282,7 +282,7 @@ const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,i
 
                 </div>
 
-                <textarea type="text" rows="5" placeholder="Write something about your trip......" class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200" value={description} onChange={onChange}></textarea>
+                <textarea type="text" rows="5" placeholder="Write something about your trip..." class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200" value={description} onChange={onChange}></textarea>
 
                 <div class='flex flex-row justify-between items-center xl:p-3 p-1 space-x-3 w-full border-solid border-2 border-base-200 rounded-xl mt-4 pb-1'>
 

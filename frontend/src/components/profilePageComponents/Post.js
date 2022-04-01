@@ -1,6 +1,6 @@
 import React from 'react'
 import Map from 'react-map-gl';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {Marker} from 'react-map-gl';
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -27,9 +27,34 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
       setShowDeleteModal(true)
   }
 
+  //
+  const [comment,setComment] = useState({
+    length:0,
+    value:"",
+
+  })
+
+
+  // 
+  console.log(comment.value)
+  console.log(comment.length)
+  
+  const [textareaRows,setTextareaRows] = useState(1)
+
+  useEffect(()=>{
+
+    if(comment.length > 79){
+      setTextareaRows(4)
+    }else{
+      setTextareaRows(1)
+
+    }
+
+  },[comment])
+
 
   return (
-    <div class="xl:grid xl:grid-cols-3 flex gap-6 w-full xl:h-96 grid-rows-4 p-4 bg-base-100 shadow-xl card card pt-10 pr-10 pl-10 mt-5">
+    <div class="xl:grid xl:grid-cols-3 flex gap-6 w-full grid-rows-8 p-4 bg-base-100 shadow-xl card card pt-10 pr-10 pl-10 mt-5 items-start">
 
         <div class="col-span-1 row-span-3 text-center p-2 card rounded-none h-60">
             <Map
@@ -54,10 +79,11 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
                 
                 </Map>
         </div>
-        <div class="col-span-2 p-1 flex place-items-center ">
+
+        <div class="col-span-2 p-1 flex place-items-center h-10 ">
           
           {/* avatar */}
-          <div class="avatar pr-5">
+          <div class="avatar pr-5 ">
               <div class="md:w-10 w-8 mask mask-squircle">
                   <img src="https://api.lorem.space/image/face?hash=92048"/>
               </div>
@@ -89,14 +115,14 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
 
         </div>
 
-        <div class="col-span-2 p-1 -mt-6 flex">
+        <div class="col-span-2 p-1 -mt-6 flex h-30">
 
           <h3>{post.description}         
              </h3>
 
         </div>
 
-        <div class="col-span-2 p-1 flex place-items-center justify-between">
+        <div class="col-span-2 p-1 flex place-items-center justify-between h-10">
 
           <h3 class=""><b>{Date(post.date)}</b> <br/>
                       by Biman 
@@ -108,7 +134,7 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
 
 
 
-        <div class="col-span-3 flex place-items-center ">
+        <div class="col-span-3 row-start-4 flex place-items-center mt-2 h-10 ">
 
           <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal">Like</button>
 
@@ -117,9 +143,61 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
           <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal ">Share</button>
 
         </div>
+        
 
         
+        <div class="col-span-3 row-start-5 row-span-4">
+          
+          {/* comments */}
+          <div class="pb-5 flex justify-start items-center">
+            
+            {/* avatar */}
+            <div class="avatar pr-5 ">
+                <div class="md:w-10 w-8 mask mask-squircle">
+                    <img src="https://api.lorem.space/image/face?hash=92048"/>
+                </div>
+            </div>
+              
+            {/* comment */}
+            <h3 class="w-full text-lg p-2 rounded-xl resize-none border-solid border-2 border-base-200 bg-base-200 h-full"
+            >
+
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since ...
+            </h3>
+              
+          </div>
+          
+          
+
+          {/* make a comment */}
+          {/* 50 rows */}
+          <textarea type="text" rows={textareaRows} placeholder="Write a comment..." class="input w-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 h-full" value={comment.value} onChange={(e)=>{
+            setComment({ 
+              length: e.target.value.split('').length,
+              value: e.target.value,
+
+           })
+
+          }}
+          
+          onKeyDown={(e) => {
+            if (e.keyCode === 13) {
+              console.log('enter')
+
+              //post comment
+            }
+          }}>
+            
+          </textarea>
+
+        </div>
+        
+        
     </div>
+
+    
+
+    
   )
 }
 

@@ -31,7 +31,7 @@ export default function Dashboard() {
   //
 
   // states used to update post
-  const [description, setDescription] = useState("")
+    const [description, setDescription] = useState("")
     const [updatedPost, setUpdatedPost] = useState()
 
   //
