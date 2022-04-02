@@ -32,7 +32,7 @@ const createPost = async (postData,token) => {
   };
 
 
-  const response = await axios.post(API_URL , postData,config)
+  const response = await axios.post(API_URL , postData, config)
 
 //   if (response.data) {
 //     localStorage.setItem('user', JSON.stringify(response.data))
@@ -75,11 +75,30 @@ const deletePost = async ( postId, token) => {
   return response.data
 }
 
+
+// Create comment
+// @route   POST /api/posts/:id/comment
+const createComment = async ( commentData, postId, token) => {
+
+  console.log(token)
+  console.log(commentData)
+  
+  
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  const response = await axios.post(API_URL +  postId + "/comment" , commentData, config)
+
+  return response.data
+}
+
 const postService = {
   getTimelinePosts, 
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  createComment
   
 }
 

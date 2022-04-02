@@ -6,6 +6,10 @@ import {Marker} from 'react-map-gl';
 import "mapbox-gl/dist/mapbox-gl.css"
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 
+import { useSelector,useDispatch  } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { createComment, reset } from '../../features/post/postSlice'
+
 const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlace, setNewPlace, showDeleteModal, setShowDeleteModal}) => {
 
 
@@ -51,6 +55,42 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
     }
 
   },[comment])
+
+   // redux
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+
+  const { user } = useSelector(
+        (state) => state.post
+    )
+
+
+  const handleEnterCommentClick = ()=>{
+        // create 
+        console.log(comment.value)
+         console.log(post._id)
+
+
+      
+            const commentData = 
+            {
+                text : comment.value,
+                postId: post._id
+            
+            }
+
+    
+            // create comment
+            dispatch(createComment(commentData))
+
+            
+            window.location.reload();
+        
+
+        
+
+    }
 
 
   return (
@@ -183,6 +223,8 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
           onKeyDown={(e) => {
             if (e.keyCode === 13) {
               console.log('enter')
+              console.log(comment.value)
+              handleEnterCommentClick(comment.value)
 
               //post comment
             }

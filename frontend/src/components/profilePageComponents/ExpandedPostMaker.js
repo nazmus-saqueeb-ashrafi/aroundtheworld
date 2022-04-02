@@ -194,7 +194,8 @@ const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,i
             dispatch(createPost(post,user))
 
             setShowModal(false)
-            window.location.reload();
+
+            // window.location.reload();
         }
 
         
