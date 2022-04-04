@@ -85,7 +85,7 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
             dispatch(createComment(commentData))
 
             
-            window.location.reload();
+            // window.location.reload();
         
 
         

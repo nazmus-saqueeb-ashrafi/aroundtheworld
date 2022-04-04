@@ -217,7 +217,7 @@ const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,i
         // {leadId: lead._id, leadData}
 
         setShowModal(false)
-        window.location.reload();
+        // window.location.reload();
 
 
 

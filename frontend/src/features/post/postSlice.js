@@ -5,12 +5,12 @@ import postService from './postService'
 const user = JSON.parse(localStorage.getItem('user'))
 
 const timelinePosts = []
-const post = null
+// const post = null
 
 const initialState = {
   user: user ? user : null,
   timelinePosts: timelinePosts ? timelinePosts : null,
-  post: post ? post : null,
+  // post: post ? post : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -208,14 +208,12 @@ export const postSlice = createSlice({
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        console.log(action.payload)
-        state.post.push = action.payload
+        state.timelinePosts.push(action.payload)
       })
       .addCase(createPost.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
-        state.post = null
       })
 
       // updatePost
@@ -225,14 +223,16 @@ export const postSlice = createSlice({
       .addCase(updatePost.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+
         console.log(action.payload)
-        state.post.push = action.payload
+        state.timelinePosts.push(action.payload)
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
-        state.post = null
+        
+        state.timelinePosts = null
       })
 
       // deletePost
@@ -243,13 +243,13 @@ export const postSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         console.log(action.payload)
-        state.post.push = action.payload
+        state.timelinePosts.push(action.payload)
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
-        state.post = null
+        state.timelinePosts = null
       })
 
       // createComment
@@ -260,13 +260,17 @@ export const postSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         console.log(action.payload)
-        // state.post.push = action.payload
+        
+        // state.timelinePosts.push = action.payload
+        state.timelinePosts.push(action.payload)
       })
       .addCase(createComment.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
-        state.post = null
+
+        state.timelinePosts = null
+
       })
    }
 })

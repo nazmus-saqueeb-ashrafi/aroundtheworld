@@ -35,6 +35,7 @@ export default function Dashboard() {
     const [updatedPost, setUpdatedPost] = useState()
 
   //
+
   
 
   // redux
@@ -45,7 +46,7 @@ export default function Dashboard() {
     (state) => state.post
   )
 
-  const { user } = useSelector(
+  const { user, isLoading, isError, message } = useSelector(
     (state) => state.auth
   )
   //
@@ -61,9 +62,13 @@ export default function Dashboard() {
 
     // grab timeline posts from user
     dispatch(getTimeLinePosts())
+
+    return ()=>{
+      dispatch(reset())
+    }
     
 
-  },[user,navigate])
+  },[user, navigate, isError, message, dispatch])
 
   
   useEffect(()=>{
@@ -90,7 +95,9 @@ export default function Dashboard() {
   },[timelinePosts])
 
   const sortedTimelinePosts = arrayForSort.sort(function(a,b){
-  return b.updatedAt.localeCompare(a.updatedAt);
+  
+    return b.updatedAt.localeCompare(a.updatedAt);
+
   })
 
   const posts = sortedTimelinePosts
