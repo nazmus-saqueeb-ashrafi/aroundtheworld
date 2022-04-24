@@ -102,7 +102,7 @@ const deletePost = asyncHandler(async(req,res) =>{
     res.status(200).json({id: req.params.id});
 })
 
-// like/dislike post, comment on post/delete comment, timeline posts
+// like/dislike post, comment on post/delete comment, timeline posts --------
 
 // @desc    Like/dislike posts, comment
 // @route   PUT /api/posts/:id/like
@@ -145,7 +145,7 @@ const likePost = asyncHandler(async(req,res) =>{
 
 })
 
-// @desc    comment on post
+// @desc    comment on post / comment on comment
 // @route   POST /api/posts/:id/comment
 // @access  Private
 const commentPost = asyncHandler(async(req,res) =>{
@@ -288,6 +288,38 @@ const timelinePosts = asyncHandler(async(req,res) =>{
 
 })
 
+
+// @desc    Get all comments on post
+// @route   GET /api/posts/:id/getcomments
+// @access  Private
+
+const getComments = asyncHandler(async(req,res) =>{
+    try {
+    const currentUser = await User.findById(req.user.id);
+
+    // check if post id in param
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+        res.status(400)
+        throw new Error('Post not found')
+    }
+
+    const postComments = await Comment.find({post:post})
+
+    res.json(postComments)
+
+    } catch (err) {
+        res.status(500)
+        throw new Error(err)
+    }
+
+})
+
+
+
+
+
 // Sharing
 
 // @desc    Share a post
@@ -375,5 +407,7 @@ module.exports= {
     deleteComment,
     deleteReply,
     sharePost,
+
+    getComments,
 }
     

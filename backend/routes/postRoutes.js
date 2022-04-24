@@ -11,6 +11,8 @@ const {getPosts,
      deleteComment,
      deleteReply,
      sharePost,
+
+     getComments
     } = require('../controllers/postController')
 
 module.exports = router
@@ -32,6 +34,8 @@ router.delete("/:id",protect, deletePost);
 router.put("/:id/like",protect, likePost);
 
 router.post("/:id/comment",protect, commentPost);
+
+router.get("/:id/getcomments",protect, getComments);
 
 router.delete("/:id/deletecomment",protect, deleteComment);
 

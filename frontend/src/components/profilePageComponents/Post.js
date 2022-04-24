@@ -19,12 +19,47 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
 
   var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
+
+  //
+  const [viewState,setViewState]= useState({
+    
+    longitude: post.longitude,
+    latitude: post.latitude,
+    zoom: 4
+                    
+  })
+
   const updateOnClick = ()=>{
     setShowModal(true)
+
     setCurrentPost(post)
+
+    // setViewState({
+    //   longitude: post.longitude,
+    //   latitude: post.latitude,
+    //   zoom: 4
+
+    // })
+
+
     setNewPlace(null)
 
   }
+
+  // useEffect(()=>{
+
+  //   setViewState({
+  //     longitude: post.longitude,
+  //     latitude: post.latitude,
+  //     zoom: 4
+
+    
+  // },[showModal])
+
+
+  
+
+  
 
   const deleteOnClick = () =>{
       setCurrentPost(post)
@@ -62,8 +97,8 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
 
 
   const { user } = useSelector(
-        (state) => state.post
-    )
+    (state) => state.post
+  )
 
 
   const handleEnterCommentClick = ()=>{
@@ -98,11 +133,11 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
 
         <div class="col-span-1 row-span-3 text-center p-2 card rounded-none h-60">
             <Map
-                    initialViewState={{
-                        longitude: post.longitude,
-                        latitude: post.latitude,
-                        zoom: 4
-                    }}
+                    {...viewState}
+                    onMove={evt => setViewState(evt.viewState)}
+                    onRender={evt => setViewState(viewState)}
+
+                    // onLoad={evt => setViewState(evt.viewState)}
                     // style={{width: "w-full", height: 250}}
                     attributionControl="none"
                     mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -215,7 +250,6 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
             setComment({ 
               length: e.target.value.split('').length,
               value: e.target.value,
-
            })
 
           }}

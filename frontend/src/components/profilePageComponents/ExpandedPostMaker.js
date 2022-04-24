@@ -205,7 +205,6 @@ const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,i
     const handleUpdatePostClick = () => {
         // update
             
-            
         const post = updatedPost
         const postId = currentPost._id
 
@@ -217,8 +216,8 @@ const ExpandedPostMaker = ({currentPost, setCurrentPost,showModal,setShowModal,i
         // {leadId: lead._id, leadData}
 
         setShowModal(false)
-        // window.location.reload();
-
+        
+        window.location.reload();
 
 
     }

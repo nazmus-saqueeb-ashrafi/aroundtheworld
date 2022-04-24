@@ -225,7 +225,10 @@ export const postSlice = createSlice({
         state.isSuccess = true
 
         console.log(action.payload)
+        
+        // state.timelinePosts.reduce(timelinePosts.filter(action.payload._id))
         state.timelinePosts.push(action.payload)
+        
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.isLoading = false
