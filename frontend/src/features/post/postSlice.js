@@ -5,12 +5,14 @@ import postService from './postService'
 const user = JSON.parse(localStorage.getItem('user'))
 
 const timelinePosts = []
+const comments = []
 // const post = null
 
 const initialState = {
   user: user ? user : null,
   timelinePosts: timelinePosts ? timelinePosts : null,
   // post: post ? post : null,
+  comments: comments ? comments : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -168,6 +170,33 @@ export const createComment = createAsyncThunk(
   }
 )
 
+// Get comments for post
+export const getCommentsForPost = createAsyncThunk(
+    'post/getCommentsForPost',
+    async ( postId , thunkAPI) => {
+
+      try {
+      
+      const token = thunkAPI.getState().auth.user.token
+
+      return await postService.getCommentsForPost(postId ,token)
+
+      
+    } catch (error) {
+
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+      
+    }
+  }
+)
+
 
 
 export const postSlice = createSlice({
@@ -274,6 +303,25 @@ export const postSlice = createSlice({
 
         state.timelinePosts = null
 
+      })
+
+      // getCommentsForPost
+      .addCase(getCommentsForPost.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getCommentsForPost.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+    
+        state.comments = [...state.comments, ...action.payload]
+        console.log(state.comments)
+      })
+      .addCase(getCommentsForPost.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+
+        // state.comments = null
       })
    }
 })

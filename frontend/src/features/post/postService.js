@@ -93,12 +93,30 @@ const createComment = async ( commentData, postId, token) => {
   return response.data
 }
 
+// Get all comments on post
+// @route   GET /api/posts/:id/getcomments
+const getCommentsForPost  = async (postId, token) => {
+
+  console.log(postId)  
+  
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  const response = await axios.get(API_URL +  postId + "/getcomments" , config)
+
+  return response.data
+}
+
+
 const postService = {
   getTimelinePosts, 
   createPost,
   updatePost,
   deletePost,
-  createComment
+  createComment,
+
+  getCommentsForPost
   
 }
 

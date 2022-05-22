@@ -8,7 +8,9 @@ import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 
 import { useSelector,useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { createComment, reset } from '../../features/post/postSlice'
+import { createComment,getCommentsForPost, reset } from '../../features/post/postSlice'
+
+import Comment from '../postComponents/Comment'
 
 const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlace, setNewPlace, showDeleteModal, setShowDeleteModal}) => {
 
@@ -123,13 +125,33 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
             // window.location.reload();
         
 
-        
-
     }
 
+  
+    useEffect(()=>{
+      // grab comments from post and store in slice
+      dispatch(getCommentsForPost(post._id))
+
+    },[post])
+
+
+  const postComments = post.comments
+  .map((comment)=>{
+
+    
+    return(
+      <>
+        <Comment commentId = {comment} />
+      </>
+
+    )
+              
+  })
+
+  
 
   return (
-    <div class="xl:grid xl:grid-cols-3 flex gap-6 w-full grid-rows-8 p-4 bg-base-100 shadow-xl card card pt-10 pr-10 pl-10 mt-5 items-start">
+    <div class="xl:grid xl:grid-cols-3 flex gap-6 w-full grid-rows-8 p-4 bg-base-100 shadow-xl card pt-10 pr-10 pl-10 mt-5 items-start">
 
         <div class="col-span-1 row-span-3 text-center p-2 card rounded-none h-60">
             <Map
@@ -222,26 +244,10 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
 
         
         <div class="col-span-3 row-start-5 row-span-4">
-          
-          {/* comments */}
-          <div class="pb-5 flex justify-start items-center">
-            
-            {/* avatar */}
-            <div class="avatar pr-5 ">
-                <div class="md:w-10 w-8 mask mask-squircle">
-                    <img src="https://api.lorem.space/image/face?hash=92048"/>
-                </div>
-            </div>
-              
-            {/* comment */}
-            <h3 class="w-full text-lg p-2 rounded-xl resize-none border-solid border-2 border-base-200 bg-base-200 h-full"
-            >
 
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since ...
-            </h3>
-              
-          </div>
-          
+  
+          {/* comments */}
+          { postComments.length > 0 && postComments }
           
 
           {/* make a comment */}

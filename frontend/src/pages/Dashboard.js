@@ -10,7 +10,7 @@ import UnExpandedPostMaker from '../components/profilePageComponents/UnExpandedP
 
 import { useSelector,useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getTimeLinePosts, reset } from '../features/post/postSlice'
+import { getTimeLinePosts,getCommentsForPost, reset } from '../features/post/postSlice'
 
 
 export default function Dashboard() {
@@ -36,7 +36,6 @@ export default function Dashboard() {
 
   //
 
-  
 
   // redux
   const navigate = useNavigate()
@@ -102,6 +101,9 @@ export default function Dashboard() {
 
   const posts = sortedTimelinePosts
   .map((post)=>{
+
+    // grab comments from each post and store in slice
+    // dispatch(getCommentsForPost(post._id))
 
     return(
       <>
@@ -174,7 +176,7 @@ export default function Dashboard() {
             <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
             {/* post */}
-            {posts.length>0?posts:"No timeline posts"}
+            { posts.length > 0 ? posts: "No timeline posts" }
     
 
           </div>
