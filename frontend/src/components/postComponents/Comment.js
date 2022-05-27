@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { useSelector,useDispatch  } from 'react-redux'
 import { createComment,getCommentsForPost, reset } from '../../features/post/postSlice'
 
-const Comment = ({commentId}) => {
+const Comment = ({commentId, currentComment, setCurrentComment}) => {
+
+  setCurrentComment(commentId)
 
   // handling post comments
   const { comments } = useSelector(

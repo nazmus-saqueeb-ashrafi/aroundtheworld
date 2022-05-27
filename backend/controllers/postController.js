@@ -175,7 +175,12 @@ const commentPost = asyncHandler(async(req,res) =>{
 
             await post.updateOne({ $push: { 
                 comments: comment,
-            } });
+                
+            }
+
+
+            // do not change updated at
+            },{ timestamps: false } );
 
             res.status(200).json("Comment added to the post");
 

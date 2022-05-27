@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 
 import ExpandedPostMaker from '../components/profilePageComponents/ExpandedPostMaker';
 import DeletePostModal from '../components/profilePageComponents/DeletePostModal';
+import DeleteCommentModal from '../components/profilePageComponents/DeleteCommentModal';
 import Post from '../components/profilePageComponents/Post';
 import UnExpandedPostMaker from '../components/profilePageComponents/UnExpandedPostMaker';
 
@@ -18,7 +19,9 @@ export default function Dashboard() {
   // states used to manipulate the map & markers, the modals (try redux maybe)
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCommentDeleteModal, setShowCommentDeleteModal] = useState(false);
   const [currentPost, setCurrentPost] = useState(false);
+  const [currentComment, setCurrentComment] = useState('');
   const [initialViewState,setInitialViewState]= useState({
         
     longitude: 0,
@@ -93,12 +96,20 @@ export default function Dashboard() {
   
   },[timelinePosts])
 
-  const sortedTimelinePosts = arrayForSort.sort(function(a,b){
   
-    return b.updatedAt.localeCompare(a.updatedAt);
 
-  })
+    const sortedTimelinePosts = arrayForSort.sort(function(a,b){
 
+      console.log(a.updatedAt)
+      console.log(b.updatedAt)
+
+      return b.updatedAt.localeCompare(a.updatedAt);  
+      
+
+    })
+
+  
+  
   const posts = sortedTimelinePosts
   .map((post)=>{
 
@@ -107,7 +118,7 @@ export default function Dashboard() {
 
     return(
       <>
-        <Post key={post._id} post={post} showModal={showModal} setShowModal={setShowModal} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} currentPost={currentPost} setCurrentPost={setCurrentPost} newPlace={newPlace} setNewPlace={setNewPlace} />
+        <Post key={post._id} post={post} showModal={showModal} setShowModal={setShowModal} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} currentPost={currentPost} setCurrentPost={setCurrentPost} newPlace={newPlace} setNewPlace={setNewPlace} showCommentDeleteModal={showCommentDeleteModal} setShowCommentDeleteModal={setShowCommentDeleteModal} currentComment={currentComment} setCurrentComment={setCurrentComment} />
       </>
 
     )
@@ -193,6 +204,13 @@ export default function Dashboard() {
         {/* delete post modal */}
         <div class="grid place-items-center">
             <DeletePostModal currentPost={currentPost} setCurrentPost={setCurrentPost} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} description={description} setDescription={setDescription} updatedPost={updatedPost} setUpdatedPost={setUpdatedPost}/>
+
+        </div>
+
+
+        {/* delete comment modal */}
+        <div class="grid place-items-center">
+            <DeleteCommentModal currentComment={currentComment} setCurrentComment={setCurrentComment} showCommentDeleteModal={showCommentDeleteModal} setShowCommentDeleteModal={setShowCommentDeleteModal}/>
 
         </div>
 

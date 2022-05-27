@@ -197,6 +197,39 @@ export const getCommentsForPost = createAsyncThunk(
   }
 )
 
+// Delete comment
+export const deleteComment = createAsyncThunk(
+    'post/deleteComment',
+    async (commentId, thunkAPI) => {
+
+      try {
+      
+      const token = thunkAPI.getState().auth.user.token
+      
+      console.log(commentId)
+    
+      return await postService.deleteComment(commentId, token)
+
+      
+    } catch (error) {
+
+      
+
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+      
+    }
+  }
+)
+
+
+
 
 
 export const postSlice = createSlice({
@@ -322,6 +355,23 @@ export const postSlice = createSlice({
         state.message = action.payload
 
         // state.comments = null
+      })
+
+      // deleteComment
+      .addCase(deleteComment.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        console.log(action.payload)
+        state.timelinePosts.push(action.payload)
+      })
+      .addCase(deleteComment.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        state.timelinePosts = null
       })
    }
 })

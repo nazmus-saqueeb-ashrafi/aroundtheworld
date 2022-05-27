@@ -108,6 +108,21 @@ const getCommentsForPost  = async (postId, token) => {
   return response.data
 }
 
+// Delete comment
+// @route   DELETE /api/posts/:id/deletecomment
+const deleteComment = async ( commentId, token) => {
+
+  console.log(token)
+  
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  const response = await axios.delete(API_URL + commentId + "/deletecomment" , config)
+
+  return response.data
+}
+
 
 const postService = {
   getTimelinePosts, 
@@ -116,7 +131,8 @@ const postService = {
   deletePost,
   createComment,
 
-  getCommentsForPost
+  getCommentsForPost,
+  deleteComment,
   
 }
 

@@ -12,8 +12,9 @@ import { createComment,getCommentsForPost, reset } from '../../features/post/pos
 
 import Comment from '../postComponents/Comment'
 
-const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlace, setNewPlace, showDeleteModal, setShowDeleteModal}) => {
+const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlace, setNewPlace, showDeleteModal, setShowDeleteModal,showCommentDeleteModal,setShowCommentDeleteModal, currentComment,setCurrentComment}) => {
 
+  // const [comment, setComment] = useState('');
 
   const [viewport, setViewport] = useState({
         zoom: 8
@@ -59,13 +60,20 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
   // },[showModal])
 
 
-  
-
-  
-
   const deleteOnClick = () =>{
       setCurrentPost(post)
       setShowDeleteModal(true)
+  }
+
+  //
+
+  //
+
+  const commentDeleteOnClick = ()=>{
+
+    console.log(currentComment)
+    setShowCommentDeleteModal(true)
+
   }
 
   //
@@ -122,7 +130,7 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
             dispatch(createComment(commentData))
 
             
-            // window.location.reload();
+            window.location.reload();  // this reload is unwanted
         
 
     }
@@ -141,7 +149,35 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
     
     return(
       <>
-        <Comment commentId = {comment} />
+
+        <div class="flex">
+
+          <Comment commentId = {comment} currentComment={currentComment} setCurrentComment={setCurrentComment} />
+
+        {/* triple dot dropdown for comment */}
+          <div class="dropdown dropdown-hover">
+           
+              <button class="btn btn-ghost btn-circle ">
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="5" viewBox="0 0 23 5">
+                  <g id="Group_1" data-name="Group 1" transform="translate(-1547 -727)">
+                    <circle id="Ellipse_21" data-name="Ellipse 21" cx="2.5" cy="2.5" r="2.5" transform="translate(1547 727)" fill="#a7adb9"/>
+                    <circle id="Ellipse_22" data-name="Ellipse 22" cx="2.5" cy="2.5" r="2.5" transform="translate(1556 727)" fill="#a7adb9"/>
+                    <circle id="Ellipse_23" data-name="Ellipse 23" cx="2.5" cy="2.5" r="2.5" transform="translate(1565 727)" fill="#a7adb9"/>
+                  </g>
+                </svg>
+
+              </button>
+            
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-24">
+              {/* <li onClick={updateOnClick}><a>Update</a></li> */}
+              <li onClick={commentDeleteOnClick} ><a>Delete</a></li>
+            </ul>
+          </div>
+
+
+        </div>
+        
       </>
 
     )
@@ -248,6 +284,7 @@ const Post = ({post, showModal, setShowModal,currentPost, setCurrentPost,newPlac
   
           {/* comments */}
           { postComments.length > 0 && postComments }
+          
           
 
           {/* make a comment */}

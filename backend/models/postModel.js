@@ -10,6 +10,7 @@ const requiredNumber = {
 
 const PostSchema = new Schema(
   {
+
     
     user: {
       type: Schema.Types.ObjectId,
