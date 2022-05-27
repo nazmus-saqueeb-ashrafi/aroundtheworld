@@ -215,7 +215,9 @@ const deleteComment = asyncHandler(async(req,res) =>{
             comment.remove()
             await post.updateOne({ $pull: { 
                 comments: comment._id,
-            } });
+            } 
+            // do not change updated at
+            },{ timestamps: false } );
 
             res.status(200).json("Comment deleted");
 

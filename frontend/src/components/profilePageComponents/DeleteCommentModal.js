@@ -24,7 +24,7 @@ const DeleteCommentModal = ({currentComment,setCurrentComment,showCommentDeleteM
 
         // delete comment
             dispatch(deleteComment(currentComment))
-            // window.location.reload();
+            window.location.reload();
 
             
     }
