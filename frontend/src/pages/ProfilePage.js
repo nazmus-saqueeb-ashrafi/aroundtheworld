@@ -5,10 +5,10 @@ import { useRef, useState } from "react";
 
 import { useDimensions } from "../useDimentions"
 
-import UnExpandedPostMaker from './profilePageComponents/UnExpandedPostMaker';
-import ExpandedPostMaker from './profilePageComponents/ExpandedPostMaker';
-import Post from './profilePageComponents/Post';
-import FriendsBlock from './profilePageComponents/FriendsBlock';
+import UnExpandedPostMaker from '../components/profilePageComponents/UnExpandedPostMaker';
+import ExpandedPostMaker from '../components/profilePageComponents/ExpandedPostMaker';
+import Post from '../components/profilePageComponents/Post';
+import FriendsBlock from '../components/profilePageComponents/FriendsBlock';
 
 
 const ProfilePage = () => {
@@ -164,26 +164,23 @@ const ProfilePage = () => {
 
             {/* 'unexpanded post' card */}
             <div class="xl:col-start-1 xl:col-span-3 w-full">
+
                 <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
+
                 <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
                 {/* post */}
-                <Post/>
+
+                {/* <Post/> */}
             </div>
-             
-
-             
-
-            
-
-             
+              
 
         </div>
 
             
         {/* 'expanded post' card */}
         <div class="grid place-items-center">
-            <ExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
+            {/* <ExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/> */}
 
         </div>
 
